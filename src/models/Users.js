@@ -1,22 +1,25 @@
 const mongoose = require("mongoose");
 
-
 const userschema = mongoose.Schema({
-    email: {
+        email: {
         type: String,
         required: [true, "Email is a required field"],
         minlength: 12,
-        maxlength:100,
-         trim: true,
+        maxlength: 100,
+        trim: true,
+        unique:true,
         validate: {
             validator: function (v) {
                 return /^[A-Za-z0-9._]{3,}@tothenew.com$/.test(v);
             },
             message: (props) => `${props.value} is not a valid TTN mail`
-        }
-    },
+            }
+            },
 
-    password: String,
+    password: {
+        type:String,
+        required:true
+              },
 
     firstname: {
         type: String,
@@ -26,15 +29,13 @@ const userschema = mongoose.Schema({
         trim: true,
 
 
-    }
-    , lastname: {
+    },
+     lastname: {
         type: String,
         minlength: [3, "lastname should be minimum of 3 character"],
         maxlength: [12, "lastname should be maximum of 12 character"],
         required: true,
         trim: true,
-
-
     },
     gender: {
         type: String,
@@ -61,16 +62,15 @@ const userschema = mongoose.Schema({
         default: "01-01-2000",
 
     },
-
-    profileimg: {
-        type:String,
+    profile_img: {
+        type: String,
     },
 
     is_Admin: {
         type: Boolean,
         default: false
     }
-
-});
+    });
 const Users = mongoose.model("USERS", userschema);
 module.exports = Users;
+
