@@ -6,15 +6,15 @@ const dotenv = require("dotenv").config();
 const feed = require("./routes/feed");
 
 app.use(express.json());
-app.use("/feed", feed);
-
-process.on('uncaughtException',(ex)=>{
-  console.log("We got uncaught exception",ex);
+app.use("/api/feed", feed);
+process.on('uncaughtException', (ex) => {
+  console.log("We got uncaught exception", ex);
+  process.exit(1);
 })
 
 app.use((err, req, res, next) => {
   console.error(err)
-  res.status(500).send(''+err)
+  res.status(500).send('' + err)
 })
 
 mongoose

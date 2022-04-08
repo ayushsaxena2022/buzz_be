@@ -26,7 +26,7 @@ exports.createFeed = async (req, res) => {
   }
 };
 
-exports.getFeed = async (req, res) => {
+exports.getFeeds = async (req, res) => {
   try {
     let feeds = await Feed.find({});
     res.status(200).json(feeds);
@@ -40,9 +40,8 @@ exports.deleteFeed = async (req, res, next) => {
     //valid object id check
 
     const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).send(`Not a valid id: ${id}`);
-    }
+    if (!mongoose.Types.ObjectId.isValid(id))  return res.status(404).send(`Not a valid id: ${id}`);
+    
     //post find
     let feed = await Feed.findById(id);
     //delete from cloudinary
