@@ -1,80 +1,69 @@
+const mongoose = require('mongoose');
 const express = require('express');
 const router = require('express').Router();
-const validation = require('../middleware/Validation');
-const Joi = require('joi');
-const commentController = require('../controllers/commentController');
-const commentMiddleware = require('../middleware/commentMiddleware')
+const commentSchema = require('../models/commentSchema');
+const Feed = require('../models/myfeed');
 
 
-router.post('/api/comments/:id', async (req, res) => {
 
-    const {error}  = validateComment(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
-    let User = await Comment.findById(req.body.user_id);
-    if(!User) return res.status(400).send('Invalid Id');
-    let Feed = await Comment.findById(req.body.user_id);
-    if(!Feed) return res.status(400).send('Invalid Id');
-    console.log(req.User);
-    console.log(req.Feed);
-    let comment = new Comment ({
-     comment: req.body.comment, 
-     User:  req.User._id,
-     Feed: req.Feed._id
-    })
-try {
+//Create Comment
+router.post('/:feed_id', async (req, res) => {
 
-const comment = await comment.save();
-const  comments = await Comment.findById(comment._id).populate('user');
-res.send(comments);
-  }
-  catch(err){
-      res.status(400).send(err);
-  }
-  
+    try {
+        const feed_Id = await Feed.findOne({ _id: req.params.feed_id });
+        const comment = new commentSchema();
+        comment.comment = req.body.comment;
+        comment.feed_Id = feed_Id._id;
+        await comment.save();
+        res.send('hello');
+        // feed_Id.commentSchema.push(comment._id);
+        // await post.save();
+        
+    }
+    catch (err) {
+        res.status(400).send(err);
+    }
+
 });
+//Read Comment
+router.get('/:id', async (req, res) => {
 
-router.get('/api/comments', async (req, res)  => {
-
-    const comments = await Comment.find()
-    .populate('User')
-    .populate('Feed')
-    .sort({'created_At': -1})
-    .sort({'updated_At': 1})
-    .then(comments => res.json(comments))
-    .catch(err => res.status(400).json('Error' + err));
+    const feed_Id = await Feed.findOne({ _id: req.params.id }).populate("user_Id");
+    res.send(feed_Id);
 
 })
-
-
+//Update Comment
 router.put('/api/comments/:id', async (req, res) => {
 
-    console.log(req.user);
-    try{
-        await Comment.findByIdAndUpdate(req.body._id);
-        res.send({"success": true});
+    try {
+        const comment = await comment.findOneAndUpdate({
+
+            _id: req.params.id,
+        })
+        req.body,
+            { new: true }
+        res.send(comment);
     }
-    catch(err) {
+    catch (err) {
         res.status(400).send(err);
     }
 
 })
-
+//Delete Comment
 router.delete('/api/comments/:id', async (req, res) => {
 
-     const comment = await Comment.findByIdAndRemove(req.params.id);
-
-     if(!comment) return res.status(404).send('comments not added')
-     res.send(comment);
+    const comment = await Comment.findByIdAndRemove(req.params.id);
+    if (!comment) return res.status(404).send('comments not added')
+    res.send({ message: "comment Deleted" });
 
 })
 
-router.get('/api/comments/:id', async (req, res) => {
-   const comment = await Comment.findById(req.params.id);
-   if(!comment) return res.status(404).send('comments not found');
-   res.send(comment);
+router.get('/api/comments/:feed_id', async (req, res) => {
+    
+    const comment = await Comment.findById(req.params.id);
+    if (!comment) return res.status(404).send('comments not found');
+    res.send(comment);
 
 });
 
-
 module.exports = router;
-

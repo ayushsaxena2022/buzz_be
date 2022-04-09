@@ -1,11 +1,12 @@
 const Joi = require('joi');
+
 //Joi Validation
 function validateComment(comment) {
-     const schema = {
-         comment: Joi.string().min(2).max(500).required()     
-     };
+  const schema = {
+    comment: Joi.string().min(5).max(10).required()
+  };
 
-     return Joi.validate(comment, schema);
-   }
+  return Joi.validate(comment, schema);
+}
 
- module.exports.validate = validateComment; 
+module.exports.validate = validateComment; 
