@@ -40,8 +40,8 @@ exports.deleteFeed = async (req, res, next) => {
     //valid object id check
 
     const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id))  return res.status(404).send(`Not a valid id: ${id}`);
-    
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`Not a valid id: ${id}`);
+
     //post find
     let feed = await Feed.findById(id);
     //delete from cloudinary
@@ -66,7 +66,6 @@ exports.updateFeed = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).send(`Not a valid id: ${id}`);
     }
-
     let feed = await Feed.findById(id);
     if (feed) {
       // console.log(req.file)
@@ -91,3 +90,64 @@ exports.updateFeed = async (req, res, next) => {
     next(err);
   }
 };
+exports.likeFeed = async (req, res, next) => {
+  try {
+    //getting ids
+    const feedid = req.params.id;
+    const userid = req.body.uid;
+    //validating 
+    if (!mongoose.Types.ObjectId.isValid(feedid)) return res.status(404).send(`Not a valid id: ${feedid}`);
+    //finding in db
+    let feed = await Feed.findById(feedid);
+
+    if (feed) {
+      //checking for existence of id 
+      const index = userid && feed.likeCount.findIndex((id) => id === userid);
+
+      if (index === -1) {
+        feed.likeCount.push(userid);        //pushing if id not present
+      } else {
+        feed.likeCount = feed.likeCount.filter((id) => id !== userid); //removing if id is present
+      }
+      //updation in database
+      const updatedFeed = await Feed.findByIdAndUpdate(feedid, feed, { new: true });
+
+      res.status(200).json(updatedFeed);
+    } else
+      res.status(404).json("No post with given id");
+  }
+  catch (error) {
+    res.status(400).send("error" + error);
+  }
+
+}
+exports.flagFeed = async (req, res, next) => {
+  try {
+    //getting ids
+    const feedid = req.params.id;
+    const userid = req.body.uid;
+    //validating 
+    if (!mongoose.Types.ObjectId.isValid(feedid)) return res.status(404).send(`Not a valid id: ${feedid}`);
+    //finding in db
+    let feed = await Feed.findById(feedid);
+
+    if (feed && feed.createdBy !== userid) {
+      //checking for existence of id 
+      const index = userid && feed.flagCount.findIndex((id) => id === userid);
+
+      if (index === -1) {
+        feed.flagCount.push(userid);        //pushing if id not present
+      } else {
+        feed.flagCount = feed.flagCount.filter((id) => id !== userid); //removing if id is present
+      }
+      //updation in database
+      const updatedFeed = await Feed.findByIdAndUpdate(feedid, feed, { new: true });
+
+      res.status(200).json(updatedFeed);
+    } else
+      res.status(404).json("No post with given id");
+  }
+  catch (error) {
+    res.status(400).send("error" + error);
+  }
+}

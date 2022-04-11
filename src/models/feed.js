@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const feedSchema = new mongoose.Schema(
   {
     createdBy: {
-      type:  String,
+      type: String,
     },
     text: {
       type: String,
@@ -34,3 +34,4 @@ const feedSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("feed", feedSchema);
+
