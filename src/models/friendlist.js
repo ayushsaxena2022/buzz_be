@@ -1,18 +1,35 @@
 const mongoose = require('mongoose');
-const Friend = mongoose.model('Friend', new mongoose.Schema({
+const Friends = mongoose.model('Friend', new mongoose.Schema({
 
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    required: true
   },
-  friend_Id: {
+
+  friend: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Friend'
+    required: true
   },
+
+  followers: [{
+    type: mongoose.Schema.Types.ObjectId,
+
+  }],
+
+  following: [{
+    type: mongoose.Schema.Types.ObjectId,
+  }],
+
+  username: {
+
+    type: String,
+
+  },
+
   status: "active"
+
 }, {
   timestamps: true,
-
 }));
 
-module.exports.Friend = Friend;
+module.exports.Friend = Friends;

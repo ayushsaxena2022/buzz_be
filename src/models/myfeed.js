@@ -1,16 +1,14 @@
 const mongoose = require('mongoose');
-const feed = mongoose.model('Feed', new mongoose.Schema({
+const feeds = new mongoose.Schema({
 
-    User_id: [{
+    User: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'commentSchema',
-        required: true
+        ref: 'comment',
     }],
     comment: {
         type: String,
         minlength: 5,
         maxlength: 10,
-        required: true
     },
     updated_At: {
         type: Date, default: new Date()
@@ -18,6 +16,6 @@ const feed = mongoose.model('Feed', new mongoose.Schema({
     created_At: {
         type: Date, default: new Date()
     }
-}));
+});
 
-module.exports.Feed = feed;
+module.exports = mongoose.model("myfeed", feeds);

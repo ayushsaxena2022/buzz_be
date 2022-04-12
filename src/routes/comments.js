@@ -1,44 +1,47 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const router = require('express').Router();
-const commentSchema = require('../models/commentSchema');
-const Feed = require('../models/myfeed');
+const comment = require('../models/comment');
+const myfeed = require('../models/myfeed');
 
 
 
 //Create Comment
-router.post('/:feed_id', async (req, res) => {
 
-    try {
-        const feed_Id = await Feed.findOne({ _id: req.params.feed_id });
-        const comment = new commentSchema();
-        comment.comment = req.body.comment;
-        comment.feed_Id = feed_Id._id;
-        await comment.save();
-        res.send('hello');
-        // feed_Id.commentSchema.push(comment._id);
-        // await post.save();
+router.post('/comments/:feed_Id', async (req, res) => {
+   try {
+        const feed_Id = await myfeed.findOne({ _id: req.params.feed_Id });
+        const comments = new comment();
+        comments.comment = req.body.comment;
+        comments.feed_Id = feed_Id._id;
+        await comments.save();
+        feed_Id.User.push(comments._id);
+        await post.save();
+        res.send(comments);
+
         
     }
-    catch (err) {
-        res.status(400).send(err);
-    }
+   catch (err) {
+       res.status(400).send(err);
+   }
 
 });
-//Read Comment
-router.get('/:id', async (req, res) => {
 
-    const feed_Id = await Feed.findOne({ _id: req.params.id }).populate("user_Id");
+//Read Comment
+router.get('/:feed_id', async (req, res) => {
+
+    const feed_Id = await Feed.findOne({ _id: req.params.feed_id }).populate("User_Id");
     res.send(feed_Id);
 
-})
+});
+
 //Update Comment
-router.put('/api/comments/:id', async (req, res) => {
+router.put('/api/comments/:feed_id', async (req, res) => {
 
     try {
         const comment = await comment.findOneAndUpdate({
 
-            _id: req.params.id,
+            _id: req.params.feed_id,
         })
         req.body,
             { new: true }
@@ -49,10 +52,11 @@ router.put('/api/comments/:id', async (req, res) => {
     }
 
 })
-//Delete Comment
-router.delete('/api/comments/:id', async (req, res) => {
 
-    const comment = await Comment.findByIdAndRemove(req.params.id);
+//Delete Comment
+router.delete('/api/comments/:feed_id', async (req, res) => {
+
+    const comment = await Comment.findByIdAndRemove(req.params.feed_id);
     if (!comment) return res.status(404).send('comments not added')
     res.send({ message: "comment Deleted" });
 
@@ -60,7 +64,7 @@ router.delete('/api/comments/:id', async (req, res) => {
 
 router.get('/api/comments/:feed_id', async (req, res) => {
     
-    const comment = await Comment.findById(req.params.id);
+    const comment = await Comment.findById(req.params.feed_id);
     if (!comment) return res.status(404).send('comments not found');
     res.send(comment);
 

@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
-const Comments = mongoose.model('Comment', new mongoose.Schema({
+const Comments = new mongoose.Schema({
 
   comment: {
     type: String,
     minlength: 5,
     maxlength: 10,
-    required: true
   },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -13,8 +12,7 @@ const Comments = mongoose.model('Comment', new mongoose.Schema({
   },
   feed_Id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Feed',
-    required: true
+    ref: 'myfeed',
   },
   updated_At: {
     type: Date, default: new Date()
@@ -22,6 +20,6 @@ const Comments = mongoose.model('Comment', new mongoose.Schema({
   created_At: {
     type: Date, default: new Date()
   }
-}));
+});
 
-module.exports.Comment = Comments;
+module.exports = mongoose.model ("comment", Comments);;
