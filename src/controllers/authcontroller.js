@@ -24,23 +24,13 @@ async function userlogin(req, res, next) {
                }
                catch (err) {
              return res.status(401).json({message:" "+err});
-               }
-               }
-
-
-
-async function registerdata(req, res, next) {
+               }}
+     
+    async function registerdata(req, res, next) {
     try {
+      const{email,password,firstname,lastname,city,state,country,gender,dob}=req.body;
          const user = new Users({
-            email: req.body.email,
-            password: req.body.password,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            city: req.body.city,
-            state: req.body.state,
-            country: req.body.country,
-            gender: req.body.gender,
-            dob: req.body.dob
+          email,password,firstname,lastname,city,state,country,gender,dob
           });
          user.age = getAgeFromDob(user.dob);
          user.password = await bcrypt.hash(user.password, 10);

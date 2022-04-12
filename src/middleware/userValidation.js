@@ -1,16 +1,12 @@
 const Joi = require("joi");
 
-
-
 const registerSchema = Joi.object({
     gender:Joi.string().required().valid("Male","Female","Other"),
     password: Joi.string().required().min(8).max(15).pattern(new RegExp("(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#%])")),
     city: Joi.string().required(),
     state: Joi.string().required(),
     country: Joi.string().required(),
-    dob:Joi.date().required()
-
-   
+    dob: Joi.date().required()
 });
 
 async function registerValidation(req, res, next) {

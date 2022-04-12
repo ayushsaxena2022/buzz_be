@@ -15,7 +15,7 @@ async function otpGenerator(req, res) {
         const state = await mailgenerator(email, otp);
         if (!state)
             return res.status(400).json({ message: "Something went wrong while sending email" });
-        return res.status(201).json({ message: "Email sent successfully" });
+             return res.status(201).json({ message: "Email sent successfully" });
     }
     catch (err) {
         res.status(401).json({ message: "" + err });

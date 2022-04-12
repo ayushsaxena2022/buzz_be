@@ -3,14 +3,14 @@ require("../controllers/googleauth.js");
 const passport = require("passport");
 const Users = require("../models/users.js");
 const jwt = require("jsonwebtoken");
-const bcrypt=require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
 
-    router.get('/', passport.authenticate('google', {
+router.get('/', passport.authenticate('google', {
     scope: ['profile', 'email']
-    }
-    ));
-    router.get('/callback', passport.authenticate('google', { failureRedirect: '/auth/fail' }),
+}
+));
+router.get('/callback', passport.authenticate('google', { failureRedirect: '/auth/fail' }),
     async (req, res, next) => {
         try {
              const result = await Users.findOne({ email: req.user.profile._json.email });
@@ -26,6 +26,7 @@ const bcrypt=require("bcryptjs");
                     const token = jwt.sign(
                     { _id: user._id, is_Admin: user.is_Admin },
                     process.env.JWT_SECRET_KEY);
+                    res.cookies("jwtoken",token);
                 return res.status(201).json({message:"Success"});
                  }
                 const token = jwt.sign(
