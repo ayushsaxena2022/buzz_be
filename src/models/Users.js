@@ -1,25 +1,25 @@
 const mongoose = require("mongoose");
 
 const userschema = mongoose.Schema({
-        email: {
+    email: {
         type: String,
         required: [true, "Email is a required field"],
         minlength: 12,
         maxlength: 100,
         trim: true,
-        unique:true,
+        unique: true,
         validate: {
             validator: function (v) {
                 return /^[A-Za-z0-9._]{3,}@tothenew.com$/.test(v);
             },
             message: (props) => `${props.value} is not a valid TTN mail`
-            }
-            },
+        }
+    },
 
     password: {
-        type:String,
-        required:true
-              },
+        type: String,
+        required: true
+    },
 
     firstname: {
         type: String,
@@ -30,7 +30,7 @@ const userschema = mongoose.Schema({
 
 
     },
-     lastname: {
+    lastname: {
         type: String,
         minlength: [3, "lastname should be minimum of 3 character"],
         maxlength: [12, "lastname should be maximum of 12 character"],
@@ -64,13 +64,18 @@ const userschema = mongoose.Schema({
     },
     profile_img: {
         type: String,
+        default: "https://media.istockphoto.com/vectors/user-icon-flat-isolated-on-white-background-user-symbol-vector-vector-id1300845620?k=20&m=1300845620&s=612x612&w=0&h=f4XTZDAv7NPuZbG0habSpU0sNgECM0X7nbKzTUta3n8="
+    },
+    profile_img_cloudinary_id: {
+        type: String,
+        default: ""
     },
 
     is_Admin: {
         type: Boolean,
         default: false
     }
-    });
+});
 const Users = mongoose.model("USERS", userschema);
 module.exports = Users;
 

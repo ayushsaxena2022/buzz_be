@@ -11,22 +11,11 @@ const Friends = mongoose.model('Friend', new mongoose.Schema({
     required: true
   },
 
-  followers: [{
-    type: mongoose.Schema.Types.ObjectId,
-
-  }],
-
-  following: [{
-    type: mongoose.Schema.Types.ObjectId,
-  }],
-
   username: {
 
     type: String,
 
   },
-
-  status: "active"
 
 }, {
   timestamps: true,
