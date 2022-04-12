@@ -21,8 +21,6 @@ const validateFile=(req,file,callback)=>{
         return;
     }
 }
-
-
 const uploadFile= multer({
     storage:storage,
     fileFilter:validateFile

@@ -16,9 +16,9 @@ const Joi = require("joi");
     }
    catch (err) {
         if (err.details[0].type === "string.pattern.base" && err.details[0].message.indexOf("email") !== -1) {
-             return res.status(401).send("A valid TTN email is allowed or Enter a valid email")
+             return res.status(401).json({message:"A valid TTN email is allowed or Enter a valid email"})
         }
-            return res.status(401).send("Error" + err);
+            return res.status(401).json({message:""+err});
         }
 }
 module.exports = loginValidation;

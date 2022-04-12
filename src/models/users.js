@@ -10,7 +10,7 @@ const userschema = mongoose.Schema({
         unique:true,
         validate: {
             validator: function (v) {
-                return /^[A-Za-z0-9._]{3,}@tothenew.com$/.test(v);
+                return /^[A-Za-z0-9._]{3,30}@tothenew.com$/.test(v);
             },
             message: (props) => `${props.value} is not a valid TTN mail`
             }
@@ -24,9 +24,9 @@ const userschema = mongoose.Schema({
     firstname: {
         type: String,
         minlength: [3, "firstname should be minimum of 3 character"],
-        maxlength: [12, "firstname should be maximum of 12 character"],
+        maxlength: [15, "firstname should be maximum of 12 character"],
         required: true,
-        trim: true,
+        trim: true
 
 
     },
@@ -43,7 +43,7 @@ const userschema = mongoose.Schema({
     },
     age: {
         type: Number,
-        default: ""
+        default: null
     },
     city: {
         type: String,
@@ -64,6 +64,7 @@ const userschema = mongoose.Schema({
     },
     profile_img: {
         type: String,
+        default:"https://media.istockphoto.com/vectors/user-icon-flat-isolated-on-white-background-user-symbol-vector-vector-id1300845620?k=20&m=1300845620&s=612x612&w=0&h=f4XTZDAv7NPuZbG0habSpU0sNgECM0X7nbKzTUta3n8="
     },
 
     is_Admin: {
