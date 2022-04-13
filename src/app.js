@@ -21,6 +21,7 @@ app.use("/auth/google",googleauth);
 app.use("/api/forgotpassword",forgotpassword);
 app.use("/api/userprofile", userProfile);
 
+
 process.on('uncaughtException', (ex) => {
   console.log("We got uncaught exception", ex);
   process.exit(1);

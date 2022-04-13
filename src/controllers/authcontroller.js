@@ -17,8 +17,8 @@ async function userlogin(req, res, next) {
                 { _id: user._id, is_Admin: user.is_Admin },
                 process.env.JWT_SECRET_KEY);
                 res.cookie("jwtoken",token,{expires:new Date(Date.now()+300000) ,httpOnly:true});
-                return res.header("x-auth-token", token).status(200).json({message:"Success"});
-        }
+                return res.status(200).json({message:"Success"});
+                   }
                 res.status(401).json({message:"Invalid Password"});
 
                }
@@ -35,6 +35,10 @@ async function userlogin(req, res, next) {
          user.age = getAgeFromDob(user.dob);
          user.password = await bcrypt.hash(user.password, 10);
          await user.save();
+         const token = jwt.sign(
+          { _id: user._id, is_Admin: user.is_Admin },
+          process.env.JWT_SECRET_KEY);
+          res.cookie("jwtoken",token,{expires:new Date(Date.now()+300000) ,httpOnly:true});
          res.status(201).json({message:"User registered Successfully"});
     }
                        catch (err) {

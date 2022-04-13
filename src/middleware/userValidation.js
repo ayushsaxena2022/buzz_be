@@ -19,9 +19,8 @@ async function registerValidation(req, res, next) {
     } catch (err) {
         if (err.details[0].message.indexOf("password") !== -1) {
             return res.status(400).json({message:" Password  must be min 8 and max 15 characters long , have atleast one uppercase letter,number and a special character "})
-
-        }
+                  }
         return res.status(400).json({message:""+err});
     }
 }
-module.exports = registerValidation;
+       module.exports = registerValidation;

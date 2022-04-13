@@ -4,6 +4,7 @@ const User = require("../models/users");
 async function Authenticate(req, res, next) {
     try {
         const token = req.cookies.jwtoken;
+        
         if (!token)
             res.redirect("http://localhost:3000/login")
         const verifytoken = jwt.verify(token, process.env.JWT_SECRET_KEY);
