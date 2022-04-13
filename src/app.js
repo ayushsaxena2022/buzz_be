@@ -1,6 +1,8 @@
-const express = require("express");
+const mongoose = require('mongoose');
+const express = require('express');
+const comments = require('./routes/comments');
+const friendslist = require ("./routes/friendslist");
 const app = express();
-const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 const feed = require("./routes/feed");
 const userProfile = require("./routes/userProfile");
@@ -14,6 +16,8 @@ var cookieParser = require('cookie-parser');
   .catch((err) => console.error("Could not connect to MongoDB..."));
 
 app.use(express.json());
+app.use("/api/comments", comments);
+app.use("/friends/:friend_Id", friendslist);
 app.use(cookieParser());
 app.use("/api/feed", feed);
 app.use("/api", userauth);
@@ -34,5 +38,3 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
-
-
