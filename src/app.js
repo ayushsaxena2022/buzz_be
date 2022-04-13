@@ -7,6 +7,7 @@ const userProfile = require("./routes/userProfile");
 const userauth = require("./routes/auth.js");
 const googleauth=require("./routes/googleauth.js")
 const forgotpassword=require("./routes/forgotpassword.js");
+const deletepost=require("./routes/deletepost");
 var cookieParser = require('cookie-parser');
 
   mongoose.connect("mongodb://localhost/buzz")
@@ -20,10 +21,7 @@ app.use("/api", userauth);
 app.use("/auth/google",googleauth);
 app.use("/api/forgotpassword",forgotpassword);
 app.use("/api/userprofile", userProfile);
-app.get("/gagan",(req,res)=>{
-
-  res.redirect("https://www.google.com")
-});
+app.use("/api/deletepost",deletepost);
 
 
 process.on('uncaughtException', (ex) => {
