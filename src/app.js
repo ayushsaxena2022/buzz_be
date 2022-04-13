@@ -20,6 +20,10 @@ app.use("/api", userauth);
 app.use("/auth/google",googleauth);
 app.use("/api/forgotpassword",forgotpassword);
 app.use("/api/userprofile", userProfile);
+app.get("/gagan",(req,res)=>{
+
+  res.redirect("https://www.google.com")
+});
 
 
 process.on('uncaughtException', (ex) => {

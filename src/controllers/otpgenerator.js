@@ -1,6 +1,7 @@
 const Users = require("../models/users");
 const generateOtp = require("../utils/generateotp");
 const mailgenerator = require("../utils/mailgenerator");
+const Otp=require("../models/otp")
 
 
 async function otpGenerator(req, res) {
@@ -16,6 +17,7 @@ async function otpGenerator(req, res) {
         if (!state)
             return res.status(400).json({ message: "Something went wrong while sending email" });
               res.status(201).json({ message: "Email sent successfully" });
+              await Otp.deleteMany({email,otp:{$nin:[otp]}});
               }
     catch (err) {
         res.status(401).json({ message:""+err });
