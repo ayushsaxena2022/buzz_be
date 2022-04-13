@@ -3,7 +3,9 @@ const cloudinary = require("../utils/cloudinary");
 const mongoose = require("mongoose");
 
 exports.createFeed = async (req, res) => {
-  const { createdBy, text } = req.body;
+  const { text } = req.body;
+  userid = req.user_id.toString()
+  // console.log(userid)
   try {
     let result;
     if (req.file) {
@@ -11,19 +13,19 @@ exports.createFeed = async (req, res) => {
     }
     //instance of post
     const data = {
-      createdBy: createdBy,
+      createdBy: userid,
       text: text,
       status: "active",
       imgLink: result?.secure_url || "",
       cloudinaryId: result?.public_id || "",
     };
     let feed = new Feed(data);
-    
+
     //saving post
     await feed.save();
-    res.status(201).json({message:"success",feed});
+    res.status(201).json({ message: "success", feed });
   } catch (error) {
-    res.status(401).json({"message": ""+error});
+    res.status(401).json({ "message": "" + error });
   }
 };
 
@@ -32,31 +34,31 @@ exports.getFeeds = async (req, res) => {
     let feeds = await Feed.find({});
     res.status(200).json(feeds);
   } catch (error) {
-    res.status(400).json({"message": ""+error});
+    res.status(400).json({ "message": "" + error });
   }
 };
 
 exports.deleteFeed = async (req, res, next) => {
   try {
     //valid object id check
-
+    userid = req.user_id.toString()
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`Not a valid id: ${id}`);
 
     //post find
     let feed = await Feed.findById(id);
     //delete from cloudinary
-    if (feed) {
+    if (feed.createdBy === userid) {
       feed.cloudinaryId &&
         (await cloudinary.uploader.destroy(feed.cloudinaryId));
       //delete post from db
       await feed.remove();
       res.json(feed);
     } else {
-      res.status(404).json("No post with given id");
+      res.status(401).json("Invalid User");
     }
   } catch (error) {
-    res.status(400).json({"message": ""+error});
+    res.status(400).json({ "message": "" + error });
   }
 };
 
@@ -64,11 +66,12 @@ exports.updateFeed = async (req, res, next) => {
   try {
     let result;
     const { id } = req.params;
+    userid = req.user_id.toString()
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).send(`Not a valid id: ${id}`);
     }
     let feed = await Feed.findById(id);
-    if (feed) {
+    if (feed.createdBy === userid) {
       // console.log(req.file)
       // // Delete image from cloudinary
       if (req.file) {
@@ -78,7 +81,7 @@ exports.updateFeed = async (req, res, next) => {
         result = await cloudinary.uploader.upload(req.file.path);
       }
     } else {
-      res.status(404).json("No post with given id");
+      res.status(401).json("Invalid User");
     }
     const data = {
       imgLink: result?.secure_url || feed.imgLink,
@@ -88,14 +91,14 @@ exports.updateFeed = async (req, res, next) => {
     feed = await Feed.findByIdAndUpdate(id, data, { new: true });
     res.status(200).json(feed);
   } catch (err) {
-    res.status(400).json({"message": ""+error});
+    res.status(400).json({ "message": "" + err });
   }
 };
 exports.likeFeed = async (req, res, next) => {
   try {
     //getting ids
     const feedid = req.params.id;
-    const userid = req.body.uid;
+    const userid = req.user_id.toString();
     //validating 
     if (!mongoose.Types.ObjectId.isValid(feedid)) return res.status(404).send(`Not a valid id: ${feedid}`);
     //finding in db
@@ -118,7 +121,7 @@ exports.likeFeed = async (req, res, next) => {
       res.status(404).json("No post with given id");
   }
   catch (error) {
-    res.status(400).json({"message": ""+error});
+    res.status(400).json({ "message": "" + error });
   }
 
 }
@@ -126,7 +129,7 @@ exports.flagFeed = async (req, res, next) => {
   try {
     //getting ids
     const feedid = req.params.id;
-    const userid = req.body.uid;
+    const userid = req.user_id.toString();
     //validating 
     if (!mongoose.Types.ObjectId.isValid(feedid)) return res.status(404).send(`Not a valid id: ${feedid}`);
     //finding in db
@@ -146,9 +149,9 @@ exports.flagFeed = async (req, res, next) => {
 
       res.status(200).json(updatedFeed);
     } else
-      res.status(404).json("No post with given id");
+      res.status(404).json("No post with given id or cannot flag self");
   }
   catch (error) {
-    res.status(400).json({"message": ""+error});
+    res.status(400).json({ "message": "" + error });
   }
 }

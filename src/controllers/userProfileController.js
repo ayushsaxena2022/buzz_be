@@ -1,10 +1,10 @@
-const users = require("../models/Users.js");
+const users = require("../models/users.js");
 const cloudinary = require("../utils/cloudinary");
 const mongoose = require("mongoose");
 
 exports.viewUserProfile = async (req, res, next) => {
     try {
-        const { userid } = req.body;
+        const  userid =  req.user_id.toString();
         if (!mongoose.Types.ObjectId.isValid(userid)) {
             return res.status(404).send(`Not a valid id: ${userid}`);
         }
@@ -21,7 +21,8 @@ exports.viewUserProfile = async (req, res, next) => {
 exports.updateUserProfile = async (req, res, next) => {
     try {
         let result;
-        const { userid, firstname, lastname, gender, city, state, country, dob } = req.body;
+        const  userid =  req.user_id.toString();
+        const {  firstname, lastname, gender, city, state, country, dob } = req.body;
         if (!mongoose.Types.ObjectId.isValid(userid)) {
             return res.status(404).send(`Not a valid id: ${userid}`);
         }
