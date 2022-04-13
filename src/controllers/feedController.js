@@ -18,11 +18,12 @@ exports.createFeed = async (req, res) => {
       cloudinaryId: result?.public_id || "",
     };
     let feed = new Feed(data);
+    
     //saving post
     await feed.save();
-    res.status(201).json(feed);
+    res.status(201).json({message:"success",feed});
   } catch (error) {
-    res.status(401).send("error" + error);
+    res.status(401).json({"message": ""+error});
   }
 };
 
@@ -31,7 +32,7 @@ exports.getFeeds = async (req, res) => {
     let feeds = await Feed.find({});
     res.status(200).json(feeds);
   } catch (error) {
-    res.status(400).send("error" + error);
+    res.status(400).json({"message": ""+error});
   }
 };
 
@@ -55,7 +56,7 @@ exports.deleteFeed = async (req, res, next) => {
       res.status(404).json("No post with given id");
     }
   } catch (error) {
-    next(error);
+    res.status(400).json({"message": ""+error});
   }
 };
 
@@ -87,7 +88,7 @@ exports.updateFeed = async (req, res, next) => {
     feed = await Feed.findByIdAndUpdate(id, data, { new: true });
     res.status(200).json(feed);
   } catch (err) {
-    next(err);
+    res.status(400).json({"message": ""+error});
   }
 };
 exports.likeFeed = async (req, res, next) => {
@@ -117,7 +118,7 @@ exports.likeFeed = async (req, res, next) => {
       res.status(404).json("No post with given id");
   }
   catch (error) {
-    res.status(400).send("error" + error);
+    res.status(400).json({"message": ""+error});
   }
 
 }
@@ -148,6 +149,6 @@ exports.flagFeed = async (req, res, next) => {
       res.status(404).json("No post with given id");
   }
   catch (error) {
-    res.status(400).send("error" + error);
+    res.status(400).json({"message": ""+error});
   }
 }

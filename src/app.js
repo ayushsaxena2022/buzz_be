@@ -5,7 +5,7 @@ const feed = require("./routes/feed");
 const userProfile = require("./routes/userProfile");
 const userauth = require("./routes/auth.js");
 const googleauth = require("./routes/googleauth.js")
-
+require('dotenv').config();
 mongoose
   .connect("mongodb://localhost/buzz")
   .then(() => console.log("Connected to MongoDB..."))
@@ -24,11 +24,11 @@ process.on('uncaughtException', (ex) => {
 
 app.use((err, req, res, next) => {
   console.error(err)
-  res.status(500).send('' + err)
+  res.status(500).json({message:'' + err})
 })
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
 
 

@@ -14,8 +14,8 @@ exports.viewUserProfile = async (req, res, next) => {
         } else {
             res.status(404).json("No user with given id");
         }
-    } catch (err) {
-        next(err);
+    } catch (error) {
+        res.status(400).json({ "message": "" + error });
     }
 };
 exports.updateUserProfile = async (req, res, next) => {
@@ -54,8 +54,8 @@ exports.updateUserProfile = async (req, res, next) => {
         };
         updatedUser = await users.findByIdAndUpdate(userid, userUpdatedData, { new: true });
         res.status(200).json(updatedUser);
-    } catch (err) {
-        res.status(400).send("error" + err);
+    } catch (error) {
+        res.status(400).json({ "message": "" + error });
     }
 };
 

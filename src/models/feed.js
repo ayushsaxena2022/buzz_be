@@ -4,6 +4,7 @@ const feedSchema = new mongoose.Schema(
   {
     createdBy: {
       type: String,
+      default:""
     },
     text: {
       type: String,
