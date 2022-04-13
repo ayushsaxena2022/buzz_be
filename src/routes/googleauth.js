@@ -5,12 +5,18 @@ const Users = require("../models/users.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+
                   router.get('/', passport.authenticate('google', {
                   scope: ['profile', 'email']
                       }));
                  router.get('/callback', passport.authenticate('google', { failureRedirect: '/auth/fail' }),
                   async (req, res, next) => {
                    try {
+                    if(!/^[A-Za-z0-9._]{3,30}@tothenew.com$/.test(req.user.profile._json.email))
+                    {
+                        res.redirect("http://localhost:3000/login/error");
+                        return;
+                    }
                    const result = await Users.findOne({ email: req.user.profile._json.email });
                      if (!result) {
                     const user = new Users({

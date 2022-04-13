@@ -7,8 +7,9 @@ require("dotenv").config();
 const feed = require("./routes/feed");
 const userProfile = require("./routes/userProfile");
 const userauth = require("./routes/auth.js");
-const googleauth = require("./routes/googleauth.js")
-const forgotpassword = require("./routes/forgotpassword.js");
+const googleauth=require("./routes/googleauth.js")
+const forgotpassword=require("./routes/forgotpassword.js");
+const deletepost=require("./routes/deletepost");
 var cookieParser = require('cookie-parser');
 const authenticate = require('./middleware/authenticate')
 mongoose.connect("mongodb://localhost/buzz")
@@ -24,7 +25,7 @@ app.use("/api", userauth);
 app.use("/auth/google", googleauth);
 app.use("/api/forgotpassword", forgotpassword);
 app.use("/api/userprofile",authenticate, userProfile);
-
+app.use("/api/deletepost",deletepost);
 app.get('/home', authenticate, async (req, res) => {
   res.status(200).json({
     fName: req.user.firstname,
