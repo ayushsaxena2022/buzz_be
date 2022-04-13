@@ -5,16 +5,13 @@ const Friends = mongoose.model('Friend', new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true
   },
-
   friend: {
     type: mongoose.Schema.Types.ObjectId,
     required: true
   },
-
   username: {
 
     type: String,
-
   },
 
 }, {

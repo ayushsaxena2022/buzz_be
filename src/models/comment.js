@@ -4,7 +4,6 @@ const Comments = new mongoose.Schema({
   comment: {
     type: String,
     minlength: 5,
-    maxlength: 10,
   },
   user_Id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -22,4 +21,4 @@ const Comments = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model ("comment", Comments);;
+module.exports = mongoose.model("comment", Comments);;
