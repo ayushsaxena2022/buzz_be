@@ -1,4 +1,4 @@
-const users = require("../models/Users.js");
+const users = require("../models/users.js");
 const cloudinary = require("../utils/cloudinary");
 const mongoose = require("mongoose");
 

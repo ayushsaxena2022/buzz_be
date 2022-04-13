@@ -1,30 +1,30 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const comments = require('./routes/comments');
-const router = require('express').Router();
-const Feed = require('./models/myfeed');
 const friendslist = require ("./routes/friendslist");
-const comment = require('./models/comment');
-const friendlist = require('./models/friendlist');
 const app = express();
+const dotenv = require("dotenv").config();
 const feed = require("./routes/feed");
 const userProfile = require("./routes/userProfile");
 const userauth = require("./routes/auth.js");
-const googleauth = require("./routes/googleauth.js")
-const dotenv = require('dotenv').config();
+const googleauth=require("./routes/googleauth.js")
+const forgotpassword=require("./routes/forgotpassword.js");
+var cookieParser = require('cookie-parser');
 
-mongoose
-  .connect("mongodb://localhost/buzz")
+  mongoose.connect("mongodb://localhost/buzz")
   .then(() => console.log("Connected to MongoDB..."))
   .catch((err) => console.error("Could not connect to MongoDB..."));
 
 app.use(express.json());
 app.use("/api/comments", comments);
 app.use("/friends/:friend_Id", friendslist);
+app.use(cookieParser());
 app.use("/api/feed", feed);
+app.use("/api", userauth);
+app.use("/auth/google",googleauth);
+app.use("/api/forgotpassword",forgotpassword);
 app.use("/api/userprofile", userProfile);
-app.use("/", userauth);
-app.use("/auth/google", googleauth);
+
 
 process.on('uncaughtException', (ex) => {
   console.log("We got uncaught exception", ex);
