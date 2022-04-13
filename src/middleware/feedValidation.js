@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const feedSchema = Joi.object({
   text: Joi.string().min(5),
-  createdBy: Joi.string().required(),
+  createdBy: Joi.string(),
 });
 
 async function feedValidation(req, res, next) {
@@ -13,7 +13,7 @@ async function feedValidation(req, res, next) {
     });
     next();
   } catch (err) {
-    return res.status(401).send("" + err);
+    return res.status(401).json({message:"" + err});
   }
 }
 module.exports = feedValidation;
