@@ -8,10 +8,10 @@ const feed = require('../models/feed');
 
 //Create Comment
 
-router.post('/api/comments/:feed_Id', async (req, res) => {
+router.post('/api/:feed_Id/comments', async (req, res) => {
     try {
         const comments = new comment();
-        comments.comment = req.body.comment;
+        comments.comment = req.body.comments;
         comments.feed_Id = feed_Id._id;
         const feed_Id = await myfeed.findOne({ _id: req.params.feed_Id });
 
@@ -26,9 +26,9 @@ router.post('/api/comments/:feed_Id', async (req, res) => {
 });
 
 //Read Comment
-router.get('/:feed_id', async (req, res) => {
+router.get('/api/:feed_id/comments', async (req, res) => {
 
-    const feed_Id = await feed.findOne({ _id: req.params.feed_id }).populate("User_Id");
+    const feed_Id = await feed.findOne({ _id: req.params.feed_id }).populate("comments");
     res.send(feed_Id);
 
 });
