@@ -20,7 +20,7 @@ exports.createFeed = async (req, res) => {
       cloudinaryId: result?.public_id || "",
     };
     let feed = new Feed(data);
-
+     await feed.populate('createdBy',"firstname lastname profile_img ");
     //saving post
     await feed.save();
     res.status(201).json({ message: "success", feed });
@@ -31,7 +31,7 @@ exports.createFeed = async (req, res) => {
 
 exports.getFeeds = async (req, res) => {
   try {
-    let feeds = await Feed.find({});
+    let feeds = await Feed.find({}).populate('createdBy',"firstname lastname profile_img ").lean();
     res.status(200).json(feeds);
   } catch (error) {
     res.status(400).json({ "message": "" + error });
@@ -47,18 +47,20 @@ exports.deleteFeed = async (req, res, next) => {
 
     //post find
     let feed = await Feed.findById(id);
+    if(feed){
     //delete from cloudinary
-    if (feed.createdBy === userid) {
+    if (feed.createdBy.toString() === userid) {
       feed.cloudinaryId &&
         (await cloudinary.uploader.destroy(feed.cloudinaryId));
       //delete post from db
       await feed.remove();
-      res.json(feed);
-    } else {
-      res.status(401).json("Invalid User");
-    }
+      res.status(200).json({message:"Post deleted",data:feed});
+    } else 
+      res.status(401).json({message:"Invalid User"});
+  }else
+  res.status(401).json({message:"Feed not found"});
   } catch (error) {
-    res.status(400).json({ "message": "" + error });
+    res.status(400).json({ message: "" + error });
   }
 };
 
@@ -149,7 +151,7 @@ exports.flagFeed = async (req, res, next) => {
 
       res.status(200).json(updatedFeed);
     } else
-      res.status(404).json("No post with given id or cannot flag self");
+      res.status(404).json({message:"No post with given id or cannot flag self"});
   }
   catch (error) {
     res.status(400).json({ "message": "" + error });
