@@ -22,7 +22,7 @@ exports.updateUserProfile = async (req, res, next) => {
     try {
         let result;
         const  userid =  req.user_id.toString();
-        const {  firstname, lastname, gender, city, state, country, dob } = req.body;
+        const {  firstname, lastname, gender, city, state, country, dob,bio,designation } = req.body;
         if (!mongoose.Types.ObjectId.isValid(userid)) {
             return res.status(404).send(`Not a valid id: ${userid}`);
         }
@@ -49,12 +49,14 @@ exports.updateUserProfile = async (req, res, next) => {
             state: state || user.state,
             country: country || user.country,
             dob: dob || user.dob,
+            designation: designation|| user.designation,
+            bio: bio|| user.bio,
             profile_img: result?.secure_url || user.profile_img,
             profile_img_cloudinary_id: result?.public_id || user.profile_img_cloudinary_id,
 
         };
         updatedUser = await users.findByIdAndUpdate(userid, userUpdatedData, { new: true });
-        res.status(200).json(updatedUser);
+        res.status(200).json({ message: "success", updatedUser});
     } catch (error) {
         res.status(400).json({ "message": "" + error });
     }

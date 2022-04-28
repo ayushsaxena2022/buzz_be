@@ -31,22 +31,27 @@ app.use("/api/userprofile",authenticate, userProfile);
 app.use("/api/deletepost",deletepost);
 app.use("/api/logout",logout);
 app.get('/home', authenticate, async (req, res) => {
+
   res.status(200).json({
     fName: req.user.firstname,
     lName: req.user.lastname,
+    userId: req.user_id,
+    profileImg: req.user.profile_img,
     is_Admin:req.user.is_Admin,
     profile_img:req.user.profile_img,
     user_id:req.user_id
-  });
-});
-app.use((err, req, res, next) => {
-  console.error("meow",err)
-  res.status(500).json({ message: ' ' + err })
-});
- process.on('uncaughtException', (ex) => {
- console.log("We got uncaught exception", ex);
- process.exit(1);
   })
-  const port = process.env.PORT || 5000;
-  app.listen(port, () => console.log(`Listening on port ${port}...`));
-  
+});
+process.on('uncaughtException', (ex) => {
+  console.log("We got uncaught exception", ex);
+  process.exit(1);
+})
+
+app.use((err, req, res, next) => {
+  console.error(err)
+  res.status(500).json({ message: '' + err })
+})
+
+
+const port = process.env.PORT || 5000;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
