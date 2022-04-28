@@ -1,24 +1,29 @@
 const mongoose = require('mongoose');
 const Comments = new mongoose.Schema({
-
-  comment: {
-    type: String,
-    minlength: 5,
-  },
-  user_Id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  feed_Id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'myfeed',
-  },
-  updated_At: {
-    type: Date, default: new Date()
-  },
-  created_At: {
-    type: Date, default: new Date()
-  }
+ 
+ comment: {
+   type: String,
+   minlength: 5,
+   required: true,
+ },
+ user_Id: {
+   type: mongoose.Schema.Types.ObjectId,
+   required: true,
+   ref:"Users"
+ },
+ feed_Id: {
+   type: mongoose.Schema.Types.ObjectId,
+   required: true,
+ },
+ updated_At: {
+   type: Date, default: Date.now(),
+ },
+ created_At: {
+   type: Date, default: Date.now(),
+ }
 });
-
-module.exports = mongoose.model("comment", Comments);;
+ 
+module.exports = mongoose.model("COMMENTS", Comments);;
+ 
+ 
+ 

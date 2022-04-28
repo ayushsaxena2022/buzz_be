@@ -2,13 +2,16 @@ const mongoose = require('mongoose');
 const express = require('express');
 const comments = require('./routes/comments');
 const friendslist = require("./routes/friendslist");
+const logout=require('./routes/logout');
+const suggestions=require('./routes/suggestions')
 const app = express();
 require("dotenv").config();
 const feed = require("./routes/feed");
 const userProfile = require("./routes/userProfile");
 const userauth = require("./routes/auth.js");
-const googleauth = require("./routes/googleauth.js")
-const forgotpassword = require("./routes/forgotpassword.js");
+const googleauth=require("./routes/googleauth.js")
+const forgotpassword=require("./routes/forgotpassword.js");
+const deletepost=require("./routes/deletepost");
 var cookieParser = require('cookie-parser');
 const authenticate = require('./middleware/authenticate')
 mongoose.connect("mongodb://localhost/buzz")
@@ -16,22 +19,27 @@ mongoose.connect("mongodb://localhost/buzz")
   .catch((err) => console.error("Could not connect to MongoDB..."));
 
 app.use(express.json());
-app.use("/api/comments", comments);
-app.use("/friends/:friend_Id", friendslist);
 app.use(cookieParser());
-app.use("/api/feed", authenticate, feed);
+app.use("/api/comments", authenticate,comments);
+app.use("/friends/:friend_Id", friendslist);
+app.use("/api/feed",authenticate, feed);
 app.use("/api", userauth);
+app.use("/api/search",suggestions);
 app.use("/auth/google", googleauth);
 app.use("/api/forgotpassword", forgotpassword);
-app.use("/api/userprofile", authenticate, userProfile);
-
+app.use("/api/userprofile",authenticate, userProfile);
+app.use("/api/deletepost",deletepost);
+app.use("/api/logout",logout);
 app.get('/home', authenticate, async (req, res) => {
 
   res.status(200).json({
     fName: req.user.firstname,
     lName: req.user.lastname,
     userId: req.user_id,
-    profileImg: req.user.profile_img
+    profileImg: req.user.profile_img,
+    is_Admin:req.user.is_Admin,
+    profile_img:req.user.profile_img,
+    user_id:req.user_id
   })
 });
 process.on('uncaughtException', (ex) => {

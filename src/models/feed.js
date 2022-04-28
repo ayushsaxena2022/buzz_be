@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const feedSchema = new mongoose.Schema(
   {
     createdBy: {
-      type: String,
-      default:""
+      type: mongoose.Schema.Types.ObjectId,
+      default:"",
+      ref:"Users"
     },
     userName:{
       type:String
