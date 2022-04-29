@@ -5,9 +5,9 @@ const mongoose = require("mongoose");
 exports.createFeed = async (req, res) => {
   const { text } = req.body;
   userid = req.user_id.toString()
-  const userName= req.user.firstname + ' ' +req.user.lastname
+  const userName = req.user.firstname + ' ' + req.user.lastname
   console.log(userName)
-  
+
   try {
     let result;
     if (req.file) {
@@ -20,10 +20,10 @@ exports.createFeed = async (req, res) => {
       status: "active",
       imgLink: result?.secure_url || "",
       cloudinaryId: result?.public_id || "",
-      userName:userName
+      userName: userName
     };
     let feed = new Feed(data);
-     await feed.populate('createdBy',"firstname lastname profile_img ");
+    await feed.populate('createdBy', "firstname lastname profile_img ");
     //saving post
     await feed.save();
     res.status(201).json({ message: "success", feed });
@@ -34,8 +34,10 @@ exports.createFeed = async (req, res) => {
 
 exports.getFeeds = async (req, res) => {
   try {
-    let feeds = await Feed.find({}).populate('createdBy',"firstname lastname profile_img ").lean();
-    res.status(200).json(feeds);
+    const { pageLimit, pageNumber } = req.query;
+    feedCount = await Feed.find({}).count()
+    let feeds = await Feed.find({}).populate('createdBy', "firstname lastname profile_img ").sort({ createdAt: -1 }).limit(pageLimit).skip((pageNumber - 1) * pageLimit);
+    res.status(200).json({ feedCount: feedCount, feeds });
   } catch (error) {
     res.status(400).json({ "message": "" + error });
   }
@@ -50,18 +52,18 @@ exports.deleteFeed = async (req, res, next) => {
 
     //post find
     let feed = await Feed.findById(id);
-    if(feed){
-    //delete from cloudinary
-    if (feed.createdBy.toString() === userid) {
-      feed.cloudinaryId &&
-        (await cloudinary.uploader.destroy(feed.cloudinaryId));
-      //delete post from db
-      await feed.remove();
-      res.status(200).json({message:"Post deleted",data:feed});
-    } else 
-      res.status(401).json({message:"Invalid User"});
-  }else
-  res.status(401).json({message:"Feed not found"});
+    if (feed) {
+      //delete from cloudinary
+      if (feed.createdBy.toString() === userid) {
+        feed.cloudinaryId &&
+          (await cloudinary.uploader.destroy(feed.cloudinaryId));
+        //delete post from db
+        await feed.remove();
+        res.status(200).json({ message: "Post deleted", data: feed });
+      } else
+        res.status(401).json({ message: "Invalid User" });
+    } else
+      res.status(401).json({ message: "Feed not found" });
   } catch (error) {
     res.status(400).json({ message: "" + error });
   }
@@ -154,7 +156,7 @@ exports.flagFeed = async (req, res, next) => {
 
       res.status(200).json(updatedFeed);
     } else
-      res.status(404).json({message:"No post with given id or cannot flag self"});
+      res.status(404).json({ message: "No post with given id or cannot flag self" });
   }
   catch (error) {
     res.status(400).json({ "message": "" + error });
