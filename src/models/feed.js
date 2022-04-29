@@ -7,10 +7,14 @@ const feedSchema = new mongoose.Schema(
       default:"",
       ref:"Users"
     },
+    userName:{
+      type:String
+    },
     text: {
       type: String,
       trim: true,
       minlength: [5, "minimum length should  be 5"],
+      maxlength: [50, "Length of text should be less."],
     },
     imgLink: {
       type: String,

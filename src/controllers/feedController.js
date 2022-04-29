@@ -5,7 +5,9 @@ const mongoose = require("mongoose");
 exports.createFeed = async (req, res) => {
   const { text } = req.body;
   userid = req.user_id.toString()
-  // console.log(userid)
+  const userName= req.user.firstname + ' ' +req.user.lastname
+  console.log(userName)
+  
   try {
     let result;
     if (req.file) {
@@ -18,6 +20,7 @@ exports.createFeed = async (req, res) => {
       status: "active",
       imgLink: result?.secure_url || "",
       cloudinaryId: result?.public_id || "",
+      userName:userName
     };
     let feed = new Feed(data);
      await feed.populate('createdBy',"firstname lastname profile_img ");
