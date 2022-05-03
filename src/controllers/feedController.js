@@ -23,7 +23,6 @@ exports.createFeed = async (req, res) => {
       userName: userName
     };
     let feed = new Feed(data);
-    await feed.populate('createdBy', "firstname lastname profile_img ");
     //saving post
     await feed.save();
     res.status(201).json({ message: "success", feed });

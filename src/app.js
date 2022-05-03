@@ -22,7 +22,7 @@ mongoose.connect("mongodb://localhost/buzz")
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/comments", authenticate,comments);
-app.use("/friends/:friend_Id",friends );
+app.use("/api/friends",authenticate,friends );
 app.use("/api/feed",authenticate, feed);
 app.use("/api", userauth);
 app.use("/api/search",searchsuggestions);
@@ -30,7 +30,7 @@ app.use("/auth/google", googleauth);
 app.use("/api/forgotpassword", forgotpassword);
 app.use("/api/userprofile",authenticate, userProfile);
 app.use("/api/deletepost",deletepost);
-app.use("/api/suggestions",suggestions);
+app.use("/api/suggestions",authenticate,suggestions);
 app.use("/api/logout",logout);
 app.get('/home', authenticate, async (req, res) => {
 
