@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
-const express = require('express');
 const router = require('express').Router();
 const Comments = require('../models/comment');
-const myfeed = require('../models/myfeed');
-const feed = require('../models/feed');
 const validateComment = require("../middleware/commentValidation");
 
 

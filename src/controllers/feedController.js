@@ -37,7 +37,7 @@ exports.getFeeds = async (req, res) => {
     const { pageLimit, pageNumber } = req.query;
     feedCount = await Feed.find({}).count()
     let feeds = await Feed.find({}).populate('createdBy', "firstname lastname profile_img ").sort({ createdAt: -1 }).limit(pageLimit).skip((pageNumber - 1) * pageLimit);
-    res.status(200).json({ feedCount: feedCount, feeds });
+    res.status(200).json({ feedCount: feedCount,pageCount:feeds.length, feeds });
   } catch (error) {
     res.status(400).json({ "message": "" + error });
   }

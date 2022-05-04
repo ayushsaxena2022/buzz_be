@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const comments = require('./routes/comments');
-const friendslist = require("./routes/friendslist");
+const friends = require("./routes/friends");
 const logout=require('./routes/logout');
-const suggestions=require('./routes/suggestions')
+const searchsuggestions=require('./routes/searchsuggestions')
+const suggestions=require("./routes/suggestions.js");
 const app = express();
 require("dotenv").config();
 const feed = require("./routes/feed");
 const userProfile = require("./routes/userProfile");
 const userauth = require("./routes/auth.js");
-const googleauth=require("./routes/googleauth.js")
+const googleauth=require("./routes/googleauth.js");
 const forgotpassword=require("./routes/forgotpassword.js");
 const deletepost=require("./routes/deletepost");
 var cookieParser = require('cookie-parser');
@@ -21,14 +22,15 @@ mongoose.connect("mongodb://localhost/buzz")
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/comments", authenticate,comments);
-app.use("/friends/:friend_Id", friendslist);
+app.use("/api/friends",authenticate,friends );
 app.use("/api/feed",authenticate, feed);
 app.use("/api", userauth);
-app.use("/api/search",suggestions);
+app.use("/api/search",searchsuggestions);
 app.use("/auth/google", googleauth);
 app.use("/api/forgotpassword", forgotpassword);
 app.use("/api/userprofile",authenticate, userProfile);
 app.use("/api/deletepost",deletepost);
+app.use("/api/suggestions",suggestions);
 app.use("/api/logout",logout);
 app.get('/home', authenticate, async (req, res) => {
 

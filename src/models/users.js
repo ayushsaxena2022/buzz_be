@@ -13,9 +13,7 @@ const userschema = mongoose.Schema({
                 return /^[A-Za-z0-9._+]{3,30}@tothenew.com$/.test(v);
             },
             message: (props) => `${props.value} is not a valid TTN mail`
-        }
-    },
-
+        }},
     password: {
         type: String,
         required: true
@@ -73,7 +71,12 @@ const userschema = mongoose.Schema({
     is_Admin: {
         type: Boolean,
         default: false
-    }
+    },
+    friends: {
+        myFriends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
+        mySentRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
+        myFriendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
+      }
     });
 const Users = mongoose.model("Users", userschema);
 module.exports = Users;
