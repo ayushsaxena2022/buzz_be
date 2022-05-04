@@ -42,8 +42,8 @@ const Users = require("../models/users");
 
      async function getFriends(req,res){
      try{
-     const me=await Users.findById(req.user_id);
-     const myFriends=me.friends.myFriends;
+     const me=await Users.findById(req.user_id).populate('friends.myFriends',"firstname lastname profile_img");
+     myFriends=me.friends.myFriends;
      res.status(200).json(myFriends)}
      catch(err){
      res.status(400).json({message:" "+err});   

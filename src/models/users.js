@@ -73,9 +73,9 @@ const userschema = mongoose.Schema({
         default: false
     },
     friends: {
-        myFriends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
-        mySentRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
-        myFriendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'users' }],
+        myFriends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
+        mySentRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
+        myFriendRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
       }
     });
 const Users = mongoose.model("Users", userschema);

@@ -12,7 +12,7 @@ const userProfile = require("./routes/userProfile");
 const userauth = require("./routes/auth.js");
 const googleauth=require("./routes/googleauth.js");
 const forgotpassword=require("./routes/forgotpassword.js");
-const deletepost=require("./routes/deletepost");
+const moderator=require("./routes/moderator");
 var cookieParser = require('cookie-parser');
 const authenticate = require('./middleware/authenticate')
 mongoose.connect("mongodb://localhost/buzz")
@@ -29,7 +29,7 @@ app.use("/api/search",searchsuggestions);
 app.use("/auth/google", googleauth);
 app.use("/api/forgotpassword", forgotpassword);
 app.use("/api/userprofile",authenticate, userProfile);
-app.use("/api/deletepost",deletepost);
+app.use("/api/moderator",moderator);
 app.use("/api/suggestions",authenticate,suggestions);
 app.use("/api/logout",logout);
 app.get('/home', authenticate, async (req, res) => {
