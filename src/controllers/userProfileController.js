@@ -22,6 +22,7 @@ exports.updateUserProfile = async (req, res, next) => {
     try {
         let result;
         const  userid =  req.user_id.toString();
+        req.body.firstname= req.body.firstname.replaceAll(" ","");
         const {  firstname, lastname, gender, city, state, country, dob,bio,designation } = req.body;
         if (!mongoose.Types.ObjectId.isValid(userid)) {
             return res.status(404).send(`Not a valid id: ${userid}`);

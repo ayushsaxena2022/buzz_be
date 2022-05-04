@@ -18,8 +18,7 @@ router.post("/suggestions", async (req,res)=>{
     regexfirst=new RegExp(str,"i");
     regexlast=new RegExp(str1,"i");
     const result=await User.find({firstname:regexfirst,lastname:regexlast});
-    
-    res.status(201).json({message:result}); 
+   res.status(201).json({message:result}); 
   }else{
    const result=await User.find({$or:[{firstname:regexfirst},{lastname:regexlast}]});
    res.status(201).json({message:result});

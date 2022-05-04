@@ -23,7 +23,6 @@ exports.createFeed = async (req, res) => {
       userName: userName
     };
     let feed = new Feed(data);
-    await feed.populate('createdBy', "firstname lastname profile_img ");
     //saving post
     await feed.save();
     res.status(201).json({ message: "success", feed });
@@ -35,13 +34,13 @@ exports.createFeed = async (req, res) => {
 exports.getFeeds = async (req, res) => {
   try {
     const { pageLimit, pageNumber } = req.query;
-    feedCount = await Feed.find({}).count()
-    let feeds = await Feed.find({}).populate('createdBy', "firstname lastname profile_img ").sort({ createdAt: -1 }).limit(pageLimit).skip((pageNumber - 1) * pageLimit);
+    feedCount = await Feed.find({status:"active"}).count()
+    let feeds = await Feed.find({status:"active"}).populate('createdBy', "firstname lastname profile_img ").sort({ createdAt: -1 }).limit(pageLimit).skip((pageNumber - 1) * pageLimit);
     res.status(200).json({ feedCount: feedCount,pageCount:feeds.length, feeds });
   } catch (error) {
     res.status(400).json({ "message": "" + error });
   }
-};
+}
 
 exports.deleteFeed = async (req, res, next) => {
   try {
