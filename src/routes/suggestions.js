@@ -4,10 +4,8 @@ const User = require("../models/users");
 router.get("/", async (req, res) => {
         try {
             const me=await User.findById(req.user_id);
-            const notsuggested=[req.user_id,...me.friends.myFriends,
-            ...me.friends.mySentRequests,
-            ...me.friends.myFriendRequests];
-        const users = await User.find({_id:{$nin:notsuggested}}).select("firstname lastname profile_img").sort({ firstname: 1 });
+            const notsuggested=[req.user_id,...me.friends.myFriends,...me.friends.myFriendRequests];
+        const users = await User.find({_id:{$nin:notsuggested}}).select("firstname lastname profile_img friends").sort({ firstname: 1 });
         res.status(200).json(users);
         } catch (err) {
         res.status(400).json({ message: " " + err });
