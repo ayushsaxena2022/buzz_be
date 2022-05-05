@@ -147,7 +147,7 @@ async function deleteRequest(req, res) {               //for deletion of friend 
         friend.friends.myFriendRequests = friend.friends.myFriendRequests.filter((request) => request.toString() !== me._id.toString());
         await me.save();
         await friend.save();
-        res.status(201).json({ message: "Request cancelled" });
+        res.status(201).json({ message: "Request Deleted" });
     } catch (err) {
         res.status(400).json({ message: " " + err });
     }
