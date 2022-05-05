@@ -68,7 +68,7 @@ async function addFriend(req, res) {
       return res.status(401).json({ message: "User dont exist" });
       if(!me.friends.myFriendRequests.includes(friendid)) {
       return res.status(400).json({ message: "Not requested" });
-        }
+      }
       me.friends.myFriendRequests = me.friends.myFriendRequests.filter((request) => request.toString() !== friendid);
       friend.friends.mySentRequests = friend.friends.mySentRequests.filter((request) => request.toString() !== me._id.toString());
       await me.save();
@@ -123,7 +123,7 @@ async function addFriend(req, res) {
     friend.friends.myFriendRequests = friend.friends.myFriendRequests.filter((request) => request.toString() !== me._id.toString());
     await me.save();
     await friend.save();
-    res.status(201).json({ message: "Request cancelled" });
+    res.status(201).json({ message: "Request deleted" });
     }catch (err) {
     res.status(400).json({ message: " " + err });
     }}

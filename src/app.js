@@ -41,7 +41,8 @@ app.get('/home', authenticate, async (req, res) => {
     profileImg: req.user.profile_img,
     is_Admin:req.user.is_Admin,
     profile_img:req.user.profile_img,
-    user_id:req.user_id
+    user_id:req.user_id,
+    friendRequestCount:req.user.friends.myFriendRequests.length
   })
 });
 process.on('uncaughtException', (ex) => {
