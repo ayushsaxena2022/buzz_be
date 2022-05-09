@@ -32,7 +32,7 @@ app.use("/api/userprofile",authenticate, userProfile);
 app.use("/api/moderator",moderator);
 app.use("/api/suggestions",authenticate,suggestions);
 app.use("/api/logout",logout);
-app.get('/home', authenticate, async (req, res) => {
+app.get('/api/home', authenticate, async (req, res) => {
 
   res.status(200).json({
     fName: req.user.firstname,
