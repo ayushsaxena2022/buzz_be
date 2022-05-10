@@ -14,6 +14,7 @@ const googleauth=require("./routes/googleauth.js");
 const forgotpassword=require("./routes/forgotpassword.js");
 const moderator=require("./routes/moderator");
 const viewProfile=require("./routes/viewProfile");
+const friendFeeds=require("./routes/friendFeeds");
 var cookieParser = require('cookie-parser');
 const authenticate = require('./middleware/authenticate')
 mongoose.connect("mongodb+srv://dbuser:Waheguru747477%40@cluster0.pkxnk.mongodb.net/buzz?retryWrites=true&w=majority", {
@@ -38,6 +39,7 @@ app.use("/api/moderator",moderator);
 app.use("/api/suggestions",authenticate,suggestions);
 app.use("/api/logout",logout);
 app.use("/api/viewProfile",authenticate,viewProfile);
+app.use("/api/friendFeeds",friendFeeds);
 app.get('/api/home', authenticate, async (req, res) => {
 
   res.status(200).json({

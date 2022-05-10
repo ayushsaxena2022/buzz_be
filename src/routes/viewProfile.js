@@ -5,13 +5,14 @@ const mongoose = require("mongoose");
 router.get("/:id", async (req,res)=>{
     try {
         const  userid =  req.params.id;
+        const currUserId=req.user_id;
         // console.log(userid)
         if (!mongoose.Types.ObjectId.isValid(userid)) {
             return res.status(404).send(`Not a valid id: ${userid}`);
         }
         let user = await users.findById(userid);
         if (user) {
-            res.status(200).json(user);
+            res.status(200).json({user,currUserId});
         } else {
             res.status(404).json("No user with given id");
         }
