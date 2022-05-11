@@ -38,7 +38,7 @@ async function userlogin(req, res, next) {
          const token = jwt.sign(
           { _id: user._id, is_Admin: user.is_Admin },
           process.env.JWT_SECRET_KEY);
-          res.cookie("jwtoken",token,{expires:new Date(Date.now()+3000000000) ,httpOnly:true});
+          res.cookie("jwtoken",token);
          res.status(201).json({message:"User registered Successfully"});
     }
                        catch (err) {
