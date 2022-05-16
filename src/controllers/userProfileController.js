@@ -1,7 +1,7 @@
 const users = require("../models/users.js");
 const cloudinary = require("../utils/cloudinary");
 const mongoose = require("mongoose");
-
+const getAge=require('../utils/getAgeFromDob')
 exports.viewUserProfile = async (req, res, next) => {
     try {
         const  userid =  req.user_id.toString();
@@ -24,6 +24,10 @@ exports.updateUserProfile = async (req, res, next) => {
         const  userid =  req.user_id.toString();
         req.body.firstname= req.body.firstname.replaceAll(" ","");
         const {  firstname, lastname, gender, city, state, country, dob,bio,designation } = req.body;
+        const date = new users({
+           dob
+            });
+        const age=getAge(date.dob);
         if (!mongoose.Types.ObjectId.isValid(userid)) {
             return res.status(404).send(`Not a valid id: ${userid}`);
         }
@@ -50,6 +54,7 @@ exports.updateUserProfile = async (req, res, next) => {
             state: state || user.state,
             country: country || user.country,
             dob: dob || user.dob,
+            age:age,
             designation: designation|| user.designation,
             bio: bio|| user.bio,
             profile_img: result?.secure_url || user.profile_img,
