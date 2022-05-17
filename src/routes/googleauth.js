@@ -4,7 +4,7 @@ const passport = require("passport");
 const Users = require("../models/users.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
+const config=require('config')
 
 router.get('/', passport.authenticate('google', {
   scope: ['profile', 'email']
@@ -13,7 +13,7 @@ router.get('/callback', passport.authenticate('google', { failureRedirect: '/aut
   async (req, res, next) => {
     try {
       if (!/^[A-Za-z0-9._]{3,30}@tothenew.com$/.test(req.user.profile._json.email)) {
-        res.redirect("http://localhost:3000/login/error");
+        res.redirect(config.get('LOGINPAGE_URL'));
         return;
       }
       const result = await Users.findOne({ email: req.user.profile._json.email });
@@ -31,14 +31,14 @@ router.get('/callback', passport.authenticate('google', { failureRedirect: '/aut
           { _id: user._id, is_Admin: user.is_Admin },
           process.env.JWT_SECRET_KEY);
         res.cookie("jwtoken", token);
-        res.redirect("http://localhost:3000/home");
+        res.redirect(config.get('HOME_URL'));
         return;
       }
       const token = jwt.sign(
         { _id: result._id, is_Admin: result.is_Admin },
         process.env.JWT_SECRET_KEY);
       res.cookie("jwtoken", token);
-      res.redirect("http://localhost:3000/home");
+      res.redirect(config.get('HOME_URL'));
       return;
     } catch (err) {
       res.status(500).json({ message: "" + err });
