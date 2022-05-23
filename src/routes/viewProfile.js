@@ -6,7 +6,6 @@ router.get("/:id", async (req,res)=>{
     try {
         const  userid =  req.params.id;
         const currUserId=req.user_id;
-        // console.log(userid)
         if (!mongoose.Types.ObjectId.isValid(userid)) {
             return res.status(404).send(`Not a valid id: ${userid}`);
         }
