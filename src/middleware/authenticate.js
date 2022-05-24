@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
-
+const logger=require('../logger/index')
 async function Authenticate(req, res, next) {
     try {
 
@@ -18,7 +18,7 @@ async function Authenticate(req, res, next) {
         next();
     }
     catch (err) {
-        console.log(err)
+        logger.error(err)
         res.status(307).json({ message: "redirect" })
     }
 }

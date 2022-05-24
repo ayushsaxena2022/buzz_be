@@ -23,12 +23,12 @@ const authenticate = require('./middleware/authenticate')
 mongoose.connect(config.get('MONGO_URI'))
   .then(() => console.log("Connected to MongoDB..."))
   .catch((err) => console.error("" + err));
-  app.use(cors(
-    {
-      origin:'*',
-      credentials:"true"
-    }
-  ));
+app.use(cors(
+  {
+    origin: '*',
+    credentials: "true"
+  }
+));
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/comments", authenticate, comments);
