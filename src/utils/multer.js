@@ -15,11 +15,11 @@ const validateFile = (req, file, callback) => {
         return;
     }
 }
-let size =5*1024*1024
+let size = 5 * 1024 * 1024
 const uploadFile = multer({
     storage: storage,
     fileFilter: validateFile,
-    limits:{fileSize:size}
+    limits: { fileSize: size }
 })
 
 module.exports = uploadFile

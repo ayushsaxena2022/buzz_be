@@ -1,21 +1,22 @@
 const router = require("express").Router();
 const users = require("../models/users.js");
 const mongoose = require("mongoose");
-
-router.get("/:id", async (req,res)=>{
+const logger = require('../logger/index')
+router.get("/:id", async (req, res) => {
     try {
-        const  userid =  req.params.id;
-        const currUserId=req.user_id;
+        const userid = req.params.id;
+        const currUserId = req.user_id;
         if (!mongoose.Types.ObjectId.isValid(userid)) {
             return res.status(404).send(`Not a valid id: ${userid}`);
         }
         let user = await users.findById(userid);
         if (user) {
-            res.status(200).json({user,currUserId});
+            res.status(200).json({ user, currUserId });
         } else {
             res.status(404).json("No user with given id");
         }
     } catch (error) {
+        logger.error(error)
         res.status(400).json({ "message": "" + error });
     }
 });

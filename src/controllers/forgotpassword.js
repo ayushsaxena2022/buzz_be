@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs/dist/bcrypt");
 const Joi = require("joi");
 const Users = require("../models/users");
 const Otp=require("../models/otp");
-
+const logger=require('../logger/index')
 
 const schema = Joi.object({
     newpassword: Joi.string().required().min(8).max(15).pattern(new RegExp("(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#%])"))
@@ -26,6 +26,7 @@ async function forgotPassword (req, res)  {
          return res.status(201).json({message:"Password reset successfully"});
           }
     catch (err) {
+        logger.error(err)
      return res.status(401).json({message:""+ err});
     }
 }

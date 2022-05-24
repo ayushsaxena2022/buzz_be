@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const router = require('express').Router();
 const Comments = require('../models/comment');
 const validateComment = require("../middleware/commentValidation");
-
+const logger =require('../logger/index')
 
 //Create Comment
 
@@ -20,6 +20,7 @@ router.post('/:feed_Id', validateComment, async (req, res) => {
         res.status(200).json({ message: "Comment added", data: commentData });
     }
     catch (err) {
+        logger.error(err)
         res.status(400).json({ message: "" + err });
     }
 
@@ -36,6 +37,7 @@ router.get('/:feed_Id', async (req, res) => {
         return res.status(400).json({ message: "Failed to fetch" });
     }
     catch (err) {
+        logger.error(err)
         return res.status(400).json({ message: "" + err });
     }
 
@@ -56,6 +58,7 @@ router.patch('/:commentid', validateComment, async (req, res) => {
         return res.status(200).json({ message: "Comment updated", data: commentbox });
     }
     catch (err) {
+        logger.error(err)
         res.status(400).json({ message: " " + err });
     }
 
@@ -76,6 +79,7 @@ try{
    res.status(400).json({ message: "Something went wrong" });
 }
 catch(err){
+    logger.error(err)
     res.status(400).json({ message:" "+err });
 }
 });

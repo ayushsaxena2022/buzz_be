@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Users = require('../models/users');
 const friendslist = require("../routes/friendslist");
 const router = require('express').Router();
-
+const logger = require("../logger/index")
 //get friendslist
 
 router.get("/friends/:friendslist_Id", async (req, res) => {
@@ -23,9 +23,8 @@ router.get("/friends/:friendslist_Id", async (req, res) => {
         });
         res.status(200).json(friendsList);
     } catch (err) {
+        logger.error(err)
         res.status(500).json(err);
-
-
     }
 
 })
