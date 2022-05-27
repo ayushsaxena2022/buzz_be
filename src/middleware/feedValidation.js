@@ -1,5 +1,5 @@
 const Joi = require("joi");
-
+const logger = require('../logger/index')
 const feedSchema = Joi.object({
   text: Joi.string().min(5),
   createdBy: Joi.string(),
@@ -13,6 +13,7 @@ async function feedValidation(req, res, next) {
     });
     next();
   } catch (err) {
+    logger.error(err)
     return res.status(401).json({message:"" + err});
   }
 }

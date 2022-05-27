@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const getAgeFromDob = require("../utils/getAgeFromDob.js");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-
+const logger = require('../logger/index')
 async function userlogin(req, res, next) {
     try {
         const {email,password} = req.body;

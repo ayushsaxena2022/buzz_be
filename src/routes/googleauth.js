@@ -5,7 +5,7 @@ const Users = require("../models/users.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const config=require('config')
-
+const logger=require('../logger/index')
 router.get('/', passport.authenticate('google', {
   scope: ['profile', 'email']
 }));
@@ -39,6 +39,7 @@ router.get('/callback', passport.authenticate('google', { failureRedirect: '/aut
         res.redirect(`${config.get('HOME_URL')}/${token}`);
       return;
     } catch (err) {
+      logger.error(err)
       res.status(500).json({ message: "" + err });
     }
   });

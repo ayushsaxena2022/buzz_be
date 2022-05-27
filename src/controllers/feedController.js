@@ -1,7 +1,7 @@
 const Feed = require("../models/feed");
 const cloudinary = require("../utils/cloudinary");
 const mongoose = require("mongoose");
-
+const logger = require('../logger/index')
 exports.createFeed = async (req, res) => {
   const { text } = req.body;
   userid = req.user_id.toString()
@@ -23,11 +23,12 @@ exports.createFeed = async (req, res) => {
       userName: userName
     };
     let feed = new Feed(data);
-    await feed.populate('createdBy',"firstname lastname profile_img ");
+    await feed.populate('createdBy', "firstname lastname profile_img ");
     //saving post
     await feed.save();
     res.status(201).json({ message: "success", feed });
   } catch (error) {
+    logger.error(error)
     res.status(401).json({ "message": "" + error });
   }
 };
@@ -35,10 +36,11 @@ exports.createFeed = async (req, res) => {
 exports.getFeeds = async (req, res) => {
   try {
     const { pageLimit, pageNumber } = req.query;
-    feedCount = await Feed.find({status:"active",createdBy:{$in:[req.user_id,...req.user.friends.myFriends]}}).count()
-    let feeds = await Feed.find({status:"active",createdBy:{$in:[req.user_id,...req.user.friends.myFriends]}}).populate('createdBy', "firstname lastname profile_img ").sort({ createdAt: -1 }).limit(pageLimit).skip((pageNumber - 1) * pageLimit);
-    res.status(200).json({ feedCount: feedCount,pageCount:feeds.length, feeds });
+    feedCount = await Feed.find({ status: "active", createdBy: { $in: [req.user_id, ...req.user.friends.myFriends] } }).count()
+    let feeds = await Feed.find({ status: "active", createdBy: { $in: [req.user_id, ...req.user.friends.myFriends] } }).populate('createdBy', "firstname lastname profile_img ").sort({ createdAt: -1 }).limit(pageLimit).skip((pageNumber - 1) * pageLimit);
+    res.status(200).json({ feedCount: feedCount, pageCount: feeds.length, feeds });
   } catch (error) {
+    logger.error(error)
     res.status(400).json({ "message": "" + error });
   }
 }
@@ -65,6 +67,7 @@ exports.deleteFeed = async (req, res, next) => {
     } else
       res.status(401).json({ message: "Feed not found" });
   } catch (error) {
+    logger.error(error)
     res.status(400).json({ message: "" + error });
   }
 };
@@ -98,6 +101,7 @@ exports.updateFeed = async (req, res, next) => {
     feed = await Feed.findByIdAndUpdate(id, data, { new: true });
     res.status(200).json(feed);
   } catch (err) {
+    logger.error(error)
     res.status(400).json({ "message": "" + err });
   }
 };
@@ -128,6 +132,7 @@ exports.likeFeed = async (req, res, next) => {
       res.status(404).json("No post with given id");
   }
   catch (error) {
+    logger.error(error)
     res.status(400).json({ "message": "" + error });
   }
 
@@ -159,6 +164,7 @@ exports.flagFeed = async (req, res, next) => {
       res.status(404).json({ message: "No post with given id or cannot flag self" });
   }
   catch (error) {
+    logger.error(error)
     res.status(400).json({ "message": "" + error });
   }
 }
