@@ -3,8 +3,7 @@ const User = require("../models/users");
 
 async function Authenticate(req, res, next) {
     try {
-
-        const token = req.cookies.jwtoken;
+        const token = req.headers['token'];
         if (!token) {
             res.status(307).json({ message: "redirect" })
             return;

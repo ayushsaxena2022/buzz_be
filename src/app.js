@@ -3,7 +3,6 @@ const cors = require('cors');
 const express = require('express');
 const comments = require('./routes/comments');
 const friends = require("./routes/friends");
-const logout = require('./routes/logout');
 const searchsuggestions = require('./routes/searchsuggestions')
 const suggestions = require("./routes/suggestions.js");
 const app = express();
@@ -17,6 +16,7 @@ const moderator = require("./routes/moderator");
 const viewProfile = require("./routes/viewProfile");
 const friendFeeds = require("./routes/friendFeeds");
 const config = require('config')
+const setHeader=require("./controllers/setHeader");
 
 var cookieParser = require('cookie-parser');
 const authenticate = require('./middleware/authenticate')
@@ -29,6 +29,7 @@ mongoose.connect(config.get('MONGO_URI'))
       credentials:"true"
     }
   ));
+app.use(setHeader);
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/comments", authenticate, comments);
@@ -41,7 +42,6 @@ app.use("/api/forgotpassword", forgotpassword);
 app.use("/api/userprofile", authenticate, userProfile);
 app.use("/api/moderator", moderator);
 app.use("/api/suggestions", authenticate, suggestions);
-app.use("/api/logout", logout);
 app.use("/api/viewProfile", authenticate, viewProfile);
 app.use("/api/friendFeeds", friendFeeds);
 app.get('/api/home', authenticate, async (req, res) => {
@@ -66,8 +66,6 @@ app.use((err, req, res, next) => {
   console.error(err)
   res.status(500).json({ message: '' + err })
 })
-
-console.log(config.get('name'))
 if (process.env.NODE_ENV == 'production') {
   app.use(express.static("buzz_fe/build"));
   const path = require('path');

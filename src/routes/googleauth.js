@@ -30,15 +30,13 @@ router.get('/callback', passport.authenticate('google', { failureRedirect: '/aut
         const token = jwt.sign(
           { _id: user._id, is_Admin: user.is_Admin },
           process.env.JWT_SECRET_KEY);
-        res.cookie("jwtoken", token);
-        res.redirect(config.get('HOME_URL'));
+        res.redirect(`${config.get('HOME_URL')}/${token}`);
         return;
       }
       const token = jwt.sign(
         { _id: result._id, is_Admin: result.is_Admin },
         process.env.JWT_SECRET_KEY);
-      res.cookie("jwtoken", token);
-      res.redirect(config.get('HOME_URL'));
+        res.redirect(`${config.get('HOME_URL')}/${token}`);
       return;
     } catch (err) {
       res.status(500).json({ message: "" + err });

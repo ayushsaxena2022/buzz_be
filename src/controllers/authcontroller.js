@@ -16,7 +16,7 @@ async function userlogin(req, res, next) {
                 const token = jwt.sign(
                 { _id: user._id, is_Admin: user.is_Admin },
                 process.env.JWT_SECRET_KEY);
-                res.cookie("jwtoken",token,{expires:new Date(Date.now()+30000000000) ,httpOnly:true});
+                res.header("x-auth-token",token);
                 return res.status(200).json({message:"Success"});
                    }
                 res.status(401).json({message:"Invalid Password"});
@@ -38,11 +38,11 @@ async function userlogin(req, res, next) {
          const token = jwt.sign(
           { _id: user._id, is_Admin: user.is_Admin },
           process.env.JWT_SECRET_KEY);
-          res.cookie("jwtoken",token);
+          res.header("x-auth-token",token);
          res.status(201).json({message:"User registered Successfully"});
     }
                        catch (err) {
-                       if (err.code === 11000) {
+                      if (err.code === 11000) {
                        return res.status(400).json({message:"User already exists"});
         }
                        res.status(400).json({message:""+err});                                        
