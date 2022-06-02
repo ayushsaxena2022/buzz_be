@@ -1,12 +1,12 @@
-const developmentLogger=require('./developmentLogger');
-const productionLogger=require('./productionLogger');
+const developmentLogger = require('./developmentLogger');
+const productionLogger = require('./productionLogger');
 
-let logger=null;
+let logger = null;
 
 if (process.env.NODE_ENV === 'development') {
-  logger=developmentLogger();
+  logger = developmentLogger();
 }
 if (process.env.NODE_ENV === 'production') {
-  logger=productionLogger();
+  logger = productionLogger();
 }
-module.exports=logger;
+module.exports = logger;

@@ -1,20 +1,20 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const feedSchema = new mongoose.Schema(
   {
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      default:"",
-      ref:"Users"
+      default: '',
+      ref: 'Users',
     },
-    userName:{
-      type:String
+    userName: {
+      type: String,
     },
     text: {
       type: String,
       trim: true,
-      minlength: [5, "minimum length should  be 5"],
-      maxlength: [1000, "Length of text should be less."],
+      minlength: [5, 'minimum length should  be 5'],
+      maxlength: [1000, 'Length of text should be less.'],
     },
     imgLink: {
       type: String,
@@ -36,8 +36,7 @@ const feedSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-module.exports = mongoose.model("feed", feedSchema);
-
+module.exports = mongoose.model('feed', feedSchema);
